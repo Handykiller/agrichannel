@@ -1,0 +1,93 @@
+<!--script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script-->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>AgriChannel</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">AgriChannel</div>
+      <div class="online">Online: <span id="onlineCount">0</span></div>
+    </header>
+
+    <main class="content">
+      <section id="channelSection" class="channel">
+        <div id="feed" class="feed card" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <div id="loginModal" class="modal">
+      <div class="modalCard card">
+        <h2 id="authTitle">Login / Create</h2>
+        <input id="passwordInput" type="password" placeholder="Create or enter your password" autocomplete="new-password" />
+        <div class="btn-row modalBtns">
+          <button id="registerBtn" class="btn primary">Create account</button>
+          <button id="loginBtn" class="btn">Login</button>
+        </div>
+        <div id="authMsg" class="note"></div>
+        <div id="ownerControls" class="note hidden">
+          <small>Logged in</small>
+          <button id="logoutBtn" class="btn">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="previewArea" class="previewArea hidden card">
+      <button id="removePreview" class="iconBtn previewRemove" title="Remove image"><i class='bx bx-x'></i></button>
+      <img id="previewImg" src="" alt="preview" />
+    </div>
+
+    <div class="compose card hidden" id="compose">
+      <div class="compose-row">
+        <input id="itemName" placeholder="Item name (e.g., Maize - 20kg)" />
+        <input id="postPrice" placeholder="Price (Ksh)" class="small" />
+      </div>
+
+      <div class="compose-row">
+        <button id="moreBtn" class="iconBtn"><i class='bx bx-chevron-up'></i></button>
+        <input id="postImage" type="file" accept="image/*" class="fileinput" />
+        <button id="postBtn" class="btn primary">Post</button>
+      </div>
+
+      <div id="extraFields" class="extraFields hidden">
+        <input id="postLocation" placeholder="Location (town/farm)" />
+        <input id="postPhone" placeholder="Phone number" />
+        <textarea id="postTitle" placeholder="Description (optional)"></textarea>
+      </div>
+    </div>
+
+    <audio id="notifAudio" preload="auto"><source src="notif.mp3" type="audio/mpeg"></audio>
+    <footer class="footer"><small>Made by Straven • & • <u>Star</u> </small></footer>
+  </div>
+
+  <script>
+    (function() {
+      const USING_LIVE_SERVER = (location.hostname === '127.0.0.1' && location.port === '5500') || (location.hostname === 'localhost' && location.port === '5500');
+      window.__USING_LIVE_SERVER = USING_LIVE_SERVER;
+      window.__SOCKET_URL = USING_LIVE_SERVER ? 'http://localhost:3000' : window.location.origin;
+      const socketSrc = USING_LIVE_SERVER ? 'http://localhost:3000/socket.io/socket.io.js' : '/socket.io/socket.io.js';
+
+      const s1 = document.createElement('script');
+      s1.src = socketSrc;
+      s1.onload = function() {
+        const s2 = document.createElement('script');
+        s2.src = 'app.js';
+        document.body.appendChild(s2);
+      };
+      s1.onerror = function() {
+        console.error('Failed to load socket client from', socketSrc);
+        const s2 = document.createElement('script');
+        s2.src = 'app.js';
+        document.body.appendChild(s2);
+      };
+      document.body.appendChild(s1);
+    })();
+  </script>
+</body>
+</html>
